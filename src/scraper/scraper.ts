@@ -15,7 +15,7 @@ export class Scraper implements IScraper
     static async setup(): Promise<Scraper>
     {
 
-        const browser = await chromium.launch({headless: false});
+        const browser = await chromium.launch();
         const context = await browser.newContext(devices['iPhone 14 Pro'])
         const page = await context.newPage();
 
