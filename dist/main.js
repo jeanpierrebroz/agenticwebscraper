@@ -13,7 +13,21 @@ const scraper_1 = require("./scraper/scraper");
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const scraper = yield scraper_1.Scraper.setup();
-        console.log("Scraper setup");
+        const searchTerm = "Playwright web scraping";
+        const resultsToCheck = 5;
+        try {
+            const links = yield scraper.search(searchTerm, resultsToCheck);
+            console.log(`Top ${resultsToCheck} links for "${searchTerm}":`);
+            links.forEach((link, index) => {
+                console.log(`${index + 1}: ${link}`);
+            });
+        }
+        catch (error) {
+            console.error("An error occurred during scraping:", error);
+        }
+        finally {
+            yield scraper.close();
+        }
     });
 }
 main();

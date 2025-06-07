@@ -22,17 +22,17 @@ export class Scraper implements IScraper
         return new Scraper(browser, context, page);
     }
 
-    //Called for each keyword phrase
-    async search(searchTerm: string): Promise<string[]>
+    //Called for each keyword phrase. Returns the content of each web page explored.
+    async search(searchTerm: string, resultsToCheck: number): Promise<string[]>
     {
-        var result: string[] = [];
-        var searchResults: Response | null = await this.getWebsiteResults(searchTerm);
-        if (searchResults == null)
+        var searchResultPage: Page | null = await this.getSearchResults(searchTerm);
+        if (searchResultPage == null)
         {
             return [];
         }
+        var links: string[] = await this.getTopLinks(searchResultPage, resultsToCheck);
 
-        return result;
+        return links;
     }
 
     async close(): Promise<void>
@@ -42,11 +42,23 @@ export class Scraper implements IScraper
         await this.browser.close();
     }
 
-    private async getWebsiteResults(searchTerm: string): Promise<Response | null>
-    {
-        var url: string = "https://www.bing.com/search?q=" + searchTerm;
-        var response = await this.page.goto(url);
-        return response;
+
+    private async getSearchResults(searchTerm: string): Promise<Page | null> {
+        const url = "https://www.bing.com/search?q=" + encodeURIComponent(searchTerm);
+        const response = await this.page.goto(url);
+        if (!response || !response.ok()) {
+            return null;
+        }
+        return this.page;
     }
 
+    //Extracts the top k links from the search results page.
+    private async getTopLinks(searchPageResults: Page, k: number): Promise<string[]>
+    {
+        const links: string[] = await searchPageResults.$$eval('li.b_algo a[href]', (anchors, max) =>
+                anchors.slice(0, max).map(a => (a as HTMLAnchorElement).href),
+            k);
+
+        return links;
+    }
 }
