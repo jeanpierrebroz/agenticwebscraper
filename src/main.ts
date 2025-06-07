@@ -2,7 +2,7 @@ import { Scraper } from "./scraper/scraper";
 
 async function main(): Promise<void> {
     const scraper: Scraper = await Scraper.setup();
-    const searchTerm: string = "Playwright web scraping";
+    const searchTerm: string = "pickleball events denver colorado";
     const resultsToCheck: number = 5;
     try {
         const links: string[] = await scraper.search(searchTerm, resultsToCheck);

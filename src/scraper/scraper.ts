@@ -15,7 +15,7 @@ export class Scraper implements IScraper
     static async setup(): Promise<Scraper>
     {
 
-        const browser = await chromium.launch();
+        const browser = await chromium.launch({headless: false});
         const context = await browser.newContext(devices['iPhone 14 Pro'])
         const page = await context.newPage();
 
@@ -31,8 +31,18 @@ export class Scraper implements IScraper
             return [];
         }
         var links: string[] = await this.getTopLinks(searchResultPage, resultsToCheck);
+        var results: string[] = await Promise.all(
+            links.map(async (link: string) => {
+                try {
+                    return await this.getPageContent(link);
+                } catch (error) {
+                    console.error(`Error fetching content from ${link}:`, error);
+                    return '';
+                }
+            })
+        );
 
-        return links;
+        return results;
     }
 
     async close(): Promise<void>
@@ -60,5 +70,42 @@ export class Scraper implements IScraper
             k);
 
         return links;
+    }
+
+    // Returns the content of the web page at the given URL.
+    private async getPageContent(url: string): Promise<string> {
+        const page = await this.context.newPage();
+        try {
+            const response = await page.goto(url, {
+                timeout: 30000,
+                waitUntil: 'networkidle'
+            });
+
+            if (!response || !response.ok()) {
+                throw new Error(`Failed to load page: ${url}`);
+            }
+
+            await page.waitForTimeout(2000);
+
+            // Extract content
+            const content = await page.evaluate(() => {
+                const main = document.querySelector('main, article');
+                if (main) return (main as HTMLElement).innerText;
+
+                const divs = Array.from(document.querySelectorAll('div'));
+                let largestDiv = divs[0] || document.body;
+                for (const div of divs) {
+                    if ((div as HTMLElement).innerText.length > (largestDiv as HTMLElement).innerText.length) {
+                        largestDiv = div;
+                    }
+                }
+                return (largestDiv as HTMLElement).innerText || (document.body as HTMLElement).innerText;
+            });
+
+            return content.trim();
+        } finally {
+            // Always close the page to free resources
+            await page.close();
+        }
     }
 }

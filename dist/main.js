@@ -13,7 +13,7 @@ const scraper_1 = require("./scraper/scraper");
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const scraper = yield scraper_1.Scraper.setup();
-        const searchTerm = "Playwright web scraping";
+        const searchTerm = "pickleball events denver colorado";
         const resultsToCheck = 5;
         try {
             const links = yield scraper.search(searchTerm, resultsToCheck);

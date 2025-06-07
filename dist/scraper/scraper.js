@@ -19,7 +19,7 @@ class Scraper {
     }
     static setup() {
         return __awaiter(this, void 0, void 0, function* () {
-            const browser = yield playwright_1.chromium.launch();
+            const browser = yield playwright_1.chromium.launch({ headless: false });
             const context = yield browser.newContext(playwright_1.devices['iPhone 14 Pro']);
             const page = yield context.newPage();
             return new Scraper(browser, context, page);
@@ -33,7 +33,16 @@ class Scraper {
                 return [];
             }
             var links = yield this.getTopLinks(searchResultPage, resultsToCheck);
-            return links;
+            var results = yield Promise.all(links.map((link) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    return yield this.getPageContent(link);
+                }
+                catch (error) {
+                    console.error(`Error fetching content from ${link}:`, error);
+                    return '';
+                }
+            })));
+            return results;
         });
     }
     close() {
@@ -58,6 +67,41 @@ class Scraper {
         return __awaiter(this, void 0, void 0, function* () {
             const links = yield searchPageResults.$$eval('li.b_algo a[href]', (anchors, max) => anchors.slice(0, max).map(a => a.href), k);
             return links;
+        });
+    }
+    // Returns the content of the web page at the given URL.
+    getPageContent(url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const page = yield this.context.newPage();
+            try {
+                const response = yield page.goto(url, {
+                    timeout: 30000,
+                    waitUntil: 'networkidle'
+                });
+                if (!response || !response.ok()) {
+                    throw new Error(`Failed to load page: ${url}`);
+                }
+                yield page.waitForTimeout(2000);
+                // Extract content
+                const content = yield page.evaluate(() => {
+                    const main = document.querySelector('main, article');
+                    if (main)
+                        return main.innerText;
+                    const divs = Array.from(document.querySelectorAll('div'));
+                    let largestDiv = divs[0] || document.body;
+                    for (const div of divs) {
+                        if (div.innerText.length > largestDiv.innerText.length) {
+                            largestDiv = div;
+                        }
+                    }
+                    return largestDiv.innerText || document.body.innerText;
+                });
+                return content.trim();
+            }
+            finally {
+                // Always close the page to free resources
+                yield page.close();
+            }
         });
     }
 }

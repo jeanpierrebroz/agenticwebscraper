@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="56fa2a3d-6fe0-4241-ae19-5e9302cdf5da" name="Changes" comment="working more on search features">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/IScraper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/IScraper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/scraper/scraper.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/scraper/scraper.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scraper/scraper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/scraper/scraper.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,7 +99,7 @@
       <option name="presentableId" value="Default" />
       <updated>1749314264273</updated>
       <workItem from="1749314265267" duration="12818000" />
-      <workItem from="1749331155418" duration="929000" />
+      <workItem from="1749331155418" duration="4526000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
