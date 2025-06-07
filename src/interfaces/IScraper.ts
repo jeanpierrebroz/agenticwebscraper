@@ -1,4 +1,4 @@
-import {chromium, devices, Browser, BrowserContext, Page} from "playwright";
+import {Browser, BrowserContext, Page} from "playwright";
 
 export interface IScraper
 {
@@ -6,5 +6,5 @@ export interface IScraper
     context: BrowserContext;
     page: Page;
 
-    search(query: string): string;
+    search(query: string): Promise<string>;
 }

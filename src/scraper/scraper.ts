@@ -19,7 +19,10 @@ export class Scraper implements IScraper
         return scraper;
     }
 
-    search(searchTerm: string): string{
+
+
+    async search(searchTerm: string): Promise<string>
+    {
 
         return '';
     }
