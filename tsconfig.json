@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "DOM"],
+    "target": "es2022",
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
+    "moduleResolution": "node",
     "outDir": "dist"
   },
   "include": ["src"]
