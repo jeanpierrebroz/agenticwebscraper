@@ -63,7 +63,6 @@ export class Scraper implements IScraper {
 
     return links
   }
-  blah blah blah
 
   // Returns the content of the web page at the given URL.
   private async getPageContent(url: string): Promise<string> {
@@ -80,7 +79,7 @@ export class Scraper implements IScraper {
 
       await page.waitForTimeout(2000)
 
-      // Extract content
+      // get all of the content to feed agent
       const content = await page.evaluate(() => {
         const main = document.querySelector('main, article')
         if (main) return (main as HTMLElement).innerText
@@ -97,7 +96,6 @@ export class Scraper implements IScraper {
 
       return content.trim()
     } finally {
-      // Always close the page to free resources
       await page.close()
     }
   }
