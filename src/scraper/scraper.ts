@@ -26,7 +26,7 @@ export class Scraper implements IScraper {
       return []
     }
     const links: string[] = await this.getTopLinks(searchResultPage, resultsToCheck)
-    const results: string[] = await Promise.all(
+    return await Promise.all(
       links.map(async (link: string) => {
         try {
           return await this.getPageContent(link)
@@ -36,8 +36,6 @@ export class Scraper implements IScraper {
         }
       }),
     )
-
-    return results
   }
 
   async close(): Promise<void> {
@@ -57,11 +55,9 @@ export class Scraper implements IScraper {
 
   // Extracts the top k links from the search results page.
   private async getTopLinks(searchPageResults: Page, k: number): Promise<string[]> {
-    const links: string[] = await searchPageResults.$$eval('li.b_algo a[href]', (anchors, max) =>
+    return await searchPageResults.$$eval('li.b_algo a[href]', (anchors, max) =>
       anchors.slice(0, max).map(a => (a as HTMLAnchorElement).href),
     k)
-
-    return links
   }
 
   // Returns the content of the web page at the given URL.
