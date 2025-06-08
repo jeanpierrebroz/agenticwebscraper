@@ -1,0 +1,2 @@
+- use etags to avoid refetching
+- agent that generates predicate function to filter out json

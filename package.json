@@ -1,24 +1,13 @@
 {
-  "name": "agenticwebscraper",
-  "version": "1.0.0",
-  "private": true,
-  "description": "",
+  "name": "geni",
+  "workspaces": [
+    "packages/geni-api",
+    "packages/geni-web"
+  ],
   "type": "module",
-  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
-  },
-  "dependencies": {
-    "@eslint/js": "^9.28.0",
-    "@stylistic/eslint-plugin": "^4.4.1",
-    "eslint-plugin-react": "^7.37.5",
-    "playwright": "^1.52.0",
-    "typescript-eslint": "^8.33.1"
-  },
+    "dev": "tsx scripts/dev.ts"
+  }
   "devDependencies": {
-    "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.30",
-    "globals": "^16.2.0",
-    "typescript": "^5.5.3"
   }
 }

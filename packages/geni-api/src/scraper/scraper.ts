@@ -5,6 +5,7 @@ export class Scraper implements IScraper {
   private browser: Browser
   private context: BrowserContext
   private page: Page
+
   private constructor(browser: Browser, context: BrowserContext, page: Page) {
     this.browser = browser
     this.context = context
