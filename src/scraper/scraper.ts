@@ -12,8 +12,9 @@ export class Scraper implements IScraper {
   }
 
   static async setup(): Promise<Scraper> {
-    const browser = await chromium.launch({ headless: false })
-    const context = await browser.newContext(devices['iPhone 14 Pro'])
+    const browser = await chromium.launch({headless: false})
+    const customUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
+    const context = await browser.newContext({ userAgent: customUserAgent });
     const page = await context.newPage()
 
     return new Scraper(browser, context, page)
@@ -66,7 +67,7 @@ export class Scraper implements IScraper {
     try {
       const response = await page.goto(url, {
         timeout: 30000,
-        waitUntil: 'networkidle',
+        waitUntil: 'domcontentloaded',
       })
 
       if (!response || !response.ok()) {
@@ -96,3 +97,5 @@ export class Scraper implements IScraper {
     }
   }
 }
+
+
