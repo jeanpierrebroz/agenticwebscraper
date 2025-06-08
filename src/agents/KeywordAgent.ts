@@ -1,11 +1,9 @@
 import { IModelInference } from "../interfaces/IModelInference";
 
 export class KeywordAgent {
-  format: string
   model: IModelInference
 
-  constructor(userFormat: string, model: IModelInference) {
-    this.format = userFormat
+  constructor(model: IModelInference) {
     this.model = model
   }
 
