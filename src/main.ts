@@ -3,7 +3,7 @@ import { OllamaQwenInference } from './llms/OllamaQwenInference';
 import {FormatterAgent} from "./agents/FormatterAgent";
 
 interface EventFormat {
-  "Name of Event": string;
+  "Name of Restaurant": string;
   "Date": string;
   "Location": string;
   "Description": string;
@@ -12,18 +12,19 @@ interface EventFormat {
 
 async function main(): Promise<void> {
   const scraper: Scraper = await Scraper.setup()
-  const searchTerm = 'pickleball games denver colorado May 2025'
+  const searchTerm = 'thai restaurants in golden, colorado'
   const resultsToCheck = 5
   try {
     const userFormat: EventFormat = {
-      "Name of Event": "<name of event>",
+      "Name of Restaurant": "<name of event>",
       "Date": "<date of event in format YYYY-MM-DD>",
       "Location": "<location of event in format City, State>",
-      "Description": "<description of event including any relevant details such as time, cost, and contact information>"
+      "Description": "Anything you can find about the restaurant, including specialties, and any other relevant information."
     };
     const results: string[] = await scraper.search(searchTerm, resultsToCheck);
     const model = new OllamaQwenInference();
-    const formatAgent = new FormatterAgent(JSON.stringify(userFormat), model);
+    results.forEach((text, index) => {console.log(`${text.length}`)})
+    const formatAgent = new FormatterAgent(JSON.stringify(userFormat), model, searchTerm);
     console.log(`Top ${resultsToCheck} results for "${searchTerm}":`);
     const formattedResults =
     results.forEach(async (link, index) => {
